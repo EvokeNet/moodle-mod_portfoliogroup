@@ -13,13 +13,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * Tribute JS initialization
- *
- * @copyright  2023 onwards Willian Mano {@link http://conecti.me}
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 define(['core/config', 'mod_portfoliogroup/tribute', 'core/ajax'], function(mdlcfg, Tribute, Ajax) {
     var TributeInit = function() {
         this.initialize();

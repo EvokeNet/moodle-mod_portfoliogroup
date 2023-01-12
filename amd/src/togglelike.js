@@ -1,14 +1,4 @@
 /* eslint-disable */
-
-/**
- * Add comment js logic.
- *
- * @package
- * @subpackage mod_portfoliogroup
- * @copyright  2021 World Bank Group <https://worldbank.org>
- * @author     Willian Mano <willianmanoaraujo@gmail.com>
- */
-
 define(['jquery', 'core/ajax', 'mod_portfoliogroup/sweetalert'], function($, Ajax, Swal) {
     var ToggleLike = function() {
         this.registerEventListeners();

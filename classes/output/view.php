@@ -55,7 +55,7 @@ class view implements renderable, templatable {
         if ($usergroups) {
             $usergroup = current($usergroups);
 
-            $groupsmembers = $groupsutil->get_groups_members($usergroup, true, $this->context);
+            $groupsmembers = $groupsutil->get_groups_members([$usergroup], true, $this->context);
 
             $layoututil = new \mod_portfoliogroup\util\layout();
             $layout = $layoututil->get_group_layout($this->portfoliogroup->course, $usergroup->id);
