@@ -1,0 +1,107 @@
+{{^group}}
+    <div class="alert alert-danger mt-4" role="alert">
+        <h4 class="alert-heading">You are not a member of a group.</h4>
+        <hr>
+        <p>Dear student, this is a group activity, to do it you need to be part of a group.</p>
+    </div>
+
+    <a href="{{config.wwwroot}}/course/view.php?id={{courseid}}" class="btn btn-primary"><i class="fa fa-chevron-left"></i> Back to campaign</a>
+{{/group}}
+
+{{#group}}
+<div class="mb-3 d-flex border border-radius p-2">
+    <div class="left">
+        <a href="{{config.wwwroot}}/mod/portfoliogroup/submit.php?id={{cmid}}" class="btn btn-primary" data-action="create-entry-modal">
+            <i class="fa fa-plus"></i> {{#str}}entry:add, mod_portfoliogroup{{/str}}
+        </a>
+    </div>
+
+    <div class="ml-auto">
+        <a href="{{config.wwwroot}}/mod/portfoliogroup/layout.php?id={{cmid}}" class="btn btn-dark"><i class="fa fa-edit"></i> Change layout</a>
+
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-share"></i> Share portfolio
+            </button>
+            <div class="dropdown-menu">
+                <a
+                    class="dropdown-item text-decoration-none fb-share-button"
+                    href="https://facebook.com/sharer.php?u=#{{config.wwwroot}}/local/portfoliogroup/index.php?id={{courseid}}&u={{userid}}&t=Check out my portfolio on Evoke!"
+                    onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;">
+                        <i class="fa fa-facebook-square"></i> Facebook
+                </a>
+                <a
+                    class="dropdown-item text-decoration-none"
+                    href="https://twitter.com/intent/tweet?url={{config.wwwroot}}/local/portfoliogroup/index.php?id={{courseid}}%26u={{userid}}&text=Check out my portfolio on Evoke!""
+                    onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;">
+                        <i class="fa fa-twitter-square"></i> Twitter
+                </a>
+                <a
+                    class="dropdown-item text-decoration-none"
+                    href="https://www.linkedin.com/sharing/share-offsite/?url={{config.wwwroot}}/local/portfoliogroup/index.php?id={{courseid}}&u={{userid}}">
+                        <i class="fa fa-linkedin-square"></i> Linkedin</a>
+                <a id="share-url" class="dropdown-item text-decoration-none" href="{{config.wwwroot}}/local/portfoliogroup/index.php?id={{courseid}}&u={{userid}}"><i class="fa fa-globe"></i> Copy public URL</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{^hasentries}}
+    <div class="alert alert-info mt-4" role="alert">
+        <h4 class="alert-heading">Your portfolio is empty.</h4>
+        <hr>
+        <p>Dear student, you need to start building your portfolio, click on the above button to start adding entries to it.</p>
+    </div>
+{{/hasentries}}
+
+{{#hasentries}}
+    {{{entries}}}
+{{/hasentries}}
+
+{{#js}}
+    require([
+        'jquery',
+        'mod_portfoliogroup/sweetalert',
+        'mod_portfoliogroup/togglelike',
+        'mod_portfoliogroup/tribute_init',
+        'mod_portfoliogroup/comment/add',
+        'mod_portfoliogroup/comment/edit'
+    ], function($, Swal, ToggleLike, TributeInit, AddComment, EditComment) {
+        TributeInit.init();
+
+        AddComment.init();
+
+        EditComment.init({{{contextid}}});
+
+        ToggleLike.init();
+
+        $('.carousel').carousel({
+            interval: 5000,
+            pause: 'hover'
+        });
+
+        $("#share-url").click(function(event) {
+            event.preventDefault();
+
+            navigator.clipboard.writeText(event.currentTarget.href);
+
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 8000,
+                timerProgressBar: true,
+                onOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                }
+            });
+
+            Toast.fire({
+                icon: 'success',
+                title: '{{#str}}linkccopiedtoclipboard, mod_portfoliogroup{{/str}}'
+            });
+        });
+    });
+{{/js}}
+{{/group}}
