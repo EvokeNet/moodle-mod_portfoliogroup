@@ -77,15 +77,15 @@ class reaction {
         ]);
     }
 
-    public function get_total_course_reactions($courseid, $userid, $reactionid = 1) {
+    public function get_total_course_reactions($courseid, $groupid, $reactionid = 1) {
         global $DB;
 
         $sql = 'SELECT count(*)
                 FROM {portfoliogroup_reactions} r
                 INNER JOIN {portfoliogroup_entries} e ON e.id = r.entryid
-                WHERE e.courseid = :courseid AND e.userid = :userid AND r.reaction = :reactionid';
+                WHERE e.courseid = :courseid AND e.groupid = :groupid AND r.reaction = :reactionid';
 
-        return $DB->count_records_sql($sql, ['courseid' => $courseid, 'userid' => $userid, 'reactionid' => $reactionid]);
+        return $DB->count_records_sql($sql, ['courseid' => $courseid, 'groupid' => $groupid, 'reactionid' => $reactionid]);
     }
 
     public function user_reacted($entryid, $reactionid) {

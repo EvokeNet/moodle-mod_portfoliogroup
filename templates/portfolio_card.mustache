@@ -1,12 +1,9 @@
 <div class="card border border-radius profile-card-4 text-center shadow-none">
     <div class="ribbon">{{layout}}</div>
     {{#hasnews}}<div class="ribbon ribbon-2 bg-pulse-gold"><i class="fa fa-star"></i> NEWS</div>{{/hasnews}}
-    <img src="{{globals.config.wwwroot}}/mod/portfoliogroup/pix/layouts/{{layout}}/index.png" class="img img-responsive" alt="{{fullname}}">
+    <img src="{{config.wwwroot}}/mod/portfoliogroup/pix/layouts/{{layout}}/index.png" class="img img-responsive" alt="{{fullname}}">
     <div class="card-body py-4">
-        <div class="profile">
-            <img src="{{userpicture}}" class="img img-responsive userpicture" alt="{{fullname}}">
-        </div>
-        <p>{{fullname}}</p>
+        <h3>{{name}}</h3>
         {{#grade}}
             <div class="text-left">
                 <div class="badge badge-success">
@@ -25,7 +22,7 @@
         {{/lastentry}}
     </div>
     <div class="card-footer">
-        <a href="{{globals.config.wwwroot}}/mod/portfoliogroup/portfolio.php?id={{globals.config.courseId}}&u={{id}}">{{#str}}viewportfolio, mod_portfoliogroup{{/str}}</a>
+        <a href="{{config.wwwroot}}/mod/portfoliogroup/portfolio.php?id={{config.courseId}}&g={{id}}">{{#str}}viewportfolio, mod_portfoliogroup{{/str}}</a>
     </div>
     <div class="card-footer">
         <div class="d-flex flex-row">

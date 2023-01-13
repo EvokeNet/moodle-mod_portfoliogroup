@@ -19,56 +19,23 @@ class portfolio {
         $this->courseid = $courseid;
     }
 
-    public function get_user_course_groups_portfolios() {
+    public function get_course_portfolios() {
         $groupsutil = new group();
 
-        $usercoursegroups = $groupsutil->get_user_groups($this->courseid);
+        $groups = $groupsutil->get_course_groups($this->courseid, false);
 
-        if (!$usercoursegroups) {
+        if (!$groups) {
             return [];
         }
 
-        $groupsmembers = $groupsutil->get_groups_members($usercoursegroups, true, $this->context);
+        $this->fill_portfolios_with_extra_data($groups);
 
-        if (empty($groupsmembers)) {
-            return [];
-        }
+        shuffle($groups);
 
-        $this->fill_user_portfolios_with_extra_data($groupsmembers);
-
-        shuffle($groupsmembers);
-
-        return array_values($groupsmembers);
+        return array_values($groups);
     }
 
-    public function get_course_portfolios() {
-        global $DB;
-
-        $fields = 'DISTINCT u.*';
-
-        $capjoin = get_enrolled_with_capabilities_join($this->context, '', 'mod/portfoliogroup:submit');
-
-        $from = ' {user} u ' . $capjoin->joins;
-
-        $sql = "SELECT {$fields} FROM {$from} WHERE {$capjoin->wheres}";
-
-        $params = $capjoin->params;
-
-        $users = $DB->get_records_sql($sql, $params);
-
-        if (!$users) {
-            return [];
-        }
-
-        $this->fill_user_portfolios_with_extra_data($users);
-
-        shuffle($users);
-
-        return array_values($users);
-    }
-
-    private function fill_user_portfolios_with_extra_data($users) {
-        $userutil = new user();
+    private function fill_portfolios_with_extra_data($groups) {
         $reactionutil = new reaction();
         $commentutil = new comment();
         $entryutil = new entry();
@@ -81,24 +48,21 @@ class portfolio {
         $cangrade = has_capability('mod/portfoliogroup:grade', $this->context);
         $portfoliowithevaluation = $gradeutil->get_portfolio_with_evaluation($this->courseid);
 
-        foreach ($users as $user) {
-            $user->totallikes = $reactionutil->get_total_course_reactions($this->courseid, $user->id);
-            $user->totalcomments = $commentutil->get_total_course_comments($this->courseid, $user->id);
-            $user->totalentries = $entryutil->get_total_course_entries($this->courseid, $user->id);
-            $user->layout = $layoututil->get_user_layout($this->courseid, $user->id, 'timeline');
-            $user->lastentry = $entryutil->get_last_course_entry($this->courseid, $user->id);
+        foreach ($groups as $group) {
+            $group->totallikes = $reactionutil->get_total_course_reactions($this->courseid, $group->id);
+            $group->totalcomments = $commentutil->get_total_course_comments($this->courseid, $group->id);
+            $group->totalentries = $entryutil->get_total_course_entries($this->courseid, $group->id);
+            $group->layout = $layoututil->get_group_layout($this->courseid, $group->id, 'timeline');
+            $group->lastentry = $entryutil->get_last_course_entry($this->courseid, $group->id);
 
-            $user->userpicture = $userutil->get_user_image_or_avatar($user);
-            $user->fullname = fullname($user);
+            $group->hasnews = false;
 
-            $user->hasnews = false;
-
-            if ($user->lastentry && $user->lastentry->timecreated > $lastaccesstoportfolios) {
-                $user->hasnews = true;
+            if ($group->lastentry && $group->lastentry->timecreated > $lastaccesstoportfolios) {
+                $group->hasnews = true;
             }
 
             if ($cangrade) {
-                $user->grade = $gradeutil->get_user_grade_string($portfoliowithevaluation, $user->id);
+                $group->grade = $gradeutil->get_group_grade_string($portfoliowithevaluation, $group->id);
             }
         }
     }

@@ -12,7 +12,7 @@ defined('MOODLE_INTERNAL') || die();
  */
 class group {
     public function get_user_group($courseid, $userid = null) {
-        global $DB, $USER;
+        global $USER;
 
         if (!$userid) {
             $userid = $USER->id;
@@ -173,10 +173,10 @@ class group {
         return $DB->count_records('groups_members', ['groupid' => $groupid, 'userid' => $userid]);
     }
 
-    public function get_course_groups($course, $withimage = true) {
+    public function get_course_groups($courseid, $withimage = true) {
         global $DB;
 
-        $groups = $DB->get_records('groups', ['courseid' => $course->id]);
+        $groups = $DB->get_records('groups', ['courseid' => $courseid]);
 
         if (!$groups) {
             return false;

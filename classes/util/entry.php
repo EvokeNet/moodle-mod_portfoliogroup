@@ -28,7 +28,8 @@ class entry {
     public function get_group_course_entries($courseid, $groupid) {
         global $DB;
 
-        $sql = 'SELECT e.*, u.firstname, u.lastname FROM {portfoliogroup_entries} e
+        $sql = 'SELECT e.*, u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename, u.firstname, u.lastname
+                FROM {portfoliogroup_entries} e
                 INNER JOIN {user} u ON u.id = e.userid
                 WHERE courseid = :courseid AND groupid = :groupid';
 
@@ -187,25 +188,25 @@ class entry {
         ];
     }
 
-    public function get_total_course_entries($courseid, $userid) {
+    public function get_total_course_entries($courseid, $groupid) {
         global $DB;
 
         $sql = 'SELECT count(*)
                 FROM {portfoliogroup_entries}
-                WHERE courseid = :courseid AND userid = :userid';
+                WHERE courseid = :courseid AND groupid = :groupid';
 
-        return $DB->count_records_sql($sql, ['userid' => $userid, 'courseid' => $courseid]);
+        return $DB->count_records_sql($sql, ['groupid' => $groupid, 'courseid' => $courseid]);
     }
 
-    public function get_last_course_entry($courseid, $userid) {
+    public function get_last_course_entry($courseid, $groupid) {
         global $DB;
 
         $sql = 'SELECT id, title, timecreated
                 FROM {portfoliogroup_entries}
-                WHERE courseid = :courseid AND userid = :userid
+                WHERE courseid = :courseid AND groupid = :groupid
                 ORDER BY id DESC LIMIT 1';
 
-        $record = $DB->get_record_sql($sql, ['courseid' => $courseid, 'userid' => $userid]);
+        $record = $DB->get_record_sql($sql, ['courseid' => $courseid, 'groupid' => $groupid]);
 
         if (!$record) {
             return false;

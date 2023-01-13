@@ -56,7 +56,7 @@ class portfolio extends external_api {
 
         $portfolios = [];
         if ($type == 'team') {
-            $portfolios = $portfolioutil->get_user_course_groups_portfolios();
+            $portfolios = $portfolioutil->get_course_portfolios();
         }
 
         if ($type == 'network') {

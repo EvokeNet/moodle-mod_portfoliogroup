@@ -29,27 +29,27 @@ class grade {
         return false;
     }
 
-    public function get_user_grade($portfolio, $userid) {
-        $usergrade = $this->get_user_grade_object($portfolio, $userid);
+    public function get_group_grade($portfolio, $groupid) {
+        $groupgrade = $this->get_group_grade_object($portfolio, $groupid);
 
-        if (!$usergrade) {
+        if (!$groupgrade) {
             return false;
         }
 
-        return $usergrade->grade;
+        return $groupgrade->grade;
     }
 
-    public function get_user_course_grade($courseid, $userid) {
+    public function get_group_course_grade($courseid, $userid) {
         $portfolio = $this->get_portfolio_with_evaluation($courseid);
 
         if (!$portfolio) {
             return false;
         }
 
-        return $this->get_user_grade_string($portfolio, $userid);
+        return $this->get_group_grade_string($portfolio, $userid);
     }
 
-    public function get_user_grade_object($portfolio, $userid) {
+    public function get_group_grade_object($portfolio, $groupid) {
         global $DB;
 
         if ($portfolio->grade == 0) {
@@ -58,14 +58,14 @@ class grade {
 
         return $DB->get_record('portfoliogroup_grades', [
             'portfolioid' => $portfolio->id,
-            'userid' => $userid
+            'groupid' => $groupid
         ]);
     }
 
-    public function get_user_grade_string($portfolio, $userid) {
+    public function get_group_grade_string($portfolio, $groupid) {
         global $DB;
 
-        $usergrade = $this->get_user_grade($portfolio, $userid);
+        $usergrade = $this->get_group_grade($portfolio, $groupid);
 
         if (!$usergrade) {
             return false;

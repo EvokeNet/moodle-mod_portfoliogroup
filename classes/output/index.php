@@ -36,13 +36,13 @@ class index implements renderable, templatable {
      * @throws \moodle_exception
      */
     public function export_for_template(renderer_base $output) {
-        $groupsutil = new group();
+        $portfolioutil = new \mod_portfoliogroup\util\portfolio($this->context, $this->course->id);
 
-        $usercoursegroups = $groupsutil->get_user_groups($this->course->id);
+        $portfolios = $portfolioutil->get_course_portfolios();
 
         return [
             'courseid' => $this->course->id,
-            'hasgroup' => !empty($usercoursegroups),
+            'portfolios' => $portfolios,
             'cangrade' => has_capability('mod/portfoliogroup:grade', $this->context),
         ];
     }
