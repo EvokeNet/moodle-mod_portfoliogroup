@@ -35,13 +35,13 @@ class portfolios extends table_sql {
 
         $this->portfoliowithevaluation = $gradeutil->get_portfolio_with_evaluation($this->course->id);
 
-        $this->define_columns(['id', 'fullname', 'email', 'group', 'status']);
+        $this->define_columns(['id', 'name', 'members', 'status']);
 
-        $this->define_headers(['ID', get_string('fullname'), 'E-mail', get_string('group'), get_string('status', 'mod_portfoliogroup')]);
+        $this->define_headers(['ID', get_string('group'),  get_string('groupmembers', 'mod_portfoliogroup'), get_string('status', 'mod_portfoliogroup')]);
+
+        $this->no_sorting('members');
 
         $this->no_sorting('status');
-
-        $this->no_sorting('group');
 
         $this->define_baseurl(new moodle_url('/mod/portfoliogroup/indextable.php', ['id' => $course->id]));
 
@@ -51,32 +51,39 @@ class portfolios extends table_sql {
     }
 
     public function base_sql() {
-        $fields = 'DISTINCT u.id, u.firstname, u.lastname, u.email';
+        $fields = 'id, courseid, name';
 
-        $capjoin = get_enrolled_with_capabilities_join($this->context, '', 'mod/portfoliogroup:submit');
+        $from = '{groups}';
 
-        $from = ' {user} u ' . $capjoin->joins;
+        $where = 'courseid = :courseid';
 
-        $params = $capjoin->params;
+        $params = ['courseid' => $this->course->id];
 
-        $this->set_sql($fields, $from, $capjoin->wheres, $params);
+        $this->set_sql($fields, $from, $where, $params);
     }
 
-    public function col_fullname($user) {
-        return $user->firstname . ' ' . $user->lastname;
-    }
-
-    public function col_group($data) {
+    public function col_members($data) {
         $grouputil = new group();
 
-        return $grouputil->get_user_groups_names($this->course->id, $data->id);
+        $members = $grouputil->get_group_members($data->id);
+
+        if (!$members) {
+            return '';
+        }
+
+        $output = '';
+        foreach ($members as $member) {
+            $output .= '<img class="w-48 userpicture" src="'.$member->userpicture.'" alt="'.$member->fullname.'" title="'.$member->fullname.'" data-toggle="tooltip">';
+        }
+
+        return $output;
     }
 
     public function col_status($data) {
         $gradeutil = new grade();
         $entryutil = new entry();
 
-        $url = new moodle_url('/mod/portfoliogroup/portfolio.php', ['id' => $this->course->id, 'u' => $data->id]);
+        $url = new moodle_url('/mod/portfoliogroup/portfolio.php', ['id' => $this->course->id, 'g' => $data->id]);
 
         $statuscontent = html_writer::link($url, get_string('viewportfolio', 'mod_portfoliogroup'), ['class' => 'btn btn-primary btn-sm']);
 
@@ -84,7 +91,7 @@ class portfolios extends table_sql {
             $statuscontent .= html_writer::span(get_string('submitted', 'mod_portfoliogroup'), 'badge badge-info ml-2 p-2');
         }
 
-        if ($this->portfoliowithevaluation && $gradeutil->user_has_grade($this->portfoliowithevaluation, $data->id)) {
+        if ($this->portfoliowithevaluation && $gradeutil->get_group_grade($this->portfoliowithevaluation, $data->id)) {
             $statuscontent .= html_writer::span(get_string('evaluated', 'mod_portfoliogroup'), 'badge badge-success ml-2 p-2');
         }
 

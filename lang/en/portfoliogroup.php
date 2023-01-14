@@ -83,3 +83,4 @@ $string['submitted'] = 'Submitted';
 $string['evaluated'] = 'Evaluated';
 
 $string['postedby'] = 'Posted by';
+$string['groupmembers'] = 'Group members';

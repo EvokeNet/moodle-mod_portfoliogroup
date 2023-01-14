@@ -668,3 +668,7 @@
     border-bottom-left-radius: .5rem;
     border-bottom-right-radius: .5rem;
 }
+
+.path-mod-portfoliogroup .w-48 {
+    width: 48px;
+}
