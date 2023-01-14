@@ -42,6 +42,7 @@ class portfolio {
         $layoututil = new layout();
         $logutil = new log();
         $gradeutil = new grade();
+        $grouputil = new group();
 
         $lastaccesstoportfolios = $logutil->get_last_time_accessed_portfolios($this->courseid);
 
@@ -54,6 +55,7 @@ class portfolio {
             $group->totalentries = $entryutil->get_total_course_entries($this->courseid, $group->id);
             $group->layout = $layoututil->get_group_layout($this->courseid, $group->id, 'timeline');
             $group->lastentry = $entryutil->get_last_course_entry($this->courseid, $group->id);
+            $group->members = $grouputil->get_group_members($group->id);
 
             $group->hasnews = false;
 

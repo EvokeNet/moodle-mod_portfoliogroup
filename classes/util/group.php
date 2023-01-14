@@ -148,9 +148,11 @@ class group {
             return false;
         }
 
+        $userutil = new user();
+
         if ($withfulluserinfo) {
             foreach ($groupmembers as $key => $groupmember) {
-                $userpicture = user::get_user_image_or_avatar($groupmember);
+                $userpicture = $userutil->get_user_image_or_avatar($groupmember);
 
                 $groupmembers[$key]->userpicture = $userpicture;
 
