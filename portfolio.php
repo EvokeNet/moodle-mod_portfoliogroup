@@ -19,6 +19,20 @@ $groupid = required_param('g', PARAM_INT);
 $course = $DB->get_record('course', ['id' => $id], '*', MUST_EXIST);
 $group = $DB->get_record('groups', ['id' => $groupid], '*', MUST_EXIST);
 
+$groupsutil = new \mod_portfoliogroup\util\group();
+
+$usergroup = $groupsutil->get_user_group($course->id);
+
+if ($usergroup->id == $group->id) {
+    $instances = get_all_instances_in_course('portfoliogroup', $course);
+
+    if ($instances) {
+        $current = current($instances);
+
+        redirect(new moodle_url('/mod/portfoliogroup/view.php', ['id' => $current->coursemodule]));
+    }
+}
+
 $context = context_course::instance($course->id);
 
 $PAGE->set_context($context);

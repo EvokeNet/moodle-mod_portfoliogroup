@@ -8,14 +8,6 @@
         </div>
 
         <div class="usergradeinfo ml-auto">
-            {{#isowner}}
-                {{#grade}}
-                    <span class="badge badge-success">{{#str}}assessment, mod_portfoliogroup{{/str}}: {{{grade}}}</span>
-                {{/grade}}
-                {{^grade}}
-                    <span class="badge badge-primary">{{#str}}notyetassessed, mod_portfoliogroup{{/str}}</span>
-                {{/grade}}
-            {{/isowner}}
             {{#cangrade}}
                 {{#grade}}
                     <span class="badge badge-success">{{#str}}assessment, mod_portfoliogroup{{/str}}: {{{grade}}}</span>

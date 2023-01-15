@@ -4,6 +4,7 @@ namespace mod_portfoliogroup\output;
 
 defined('MOODLE_INTERNAL') || die();
 
+use mod_portfoliogroup\util\grade;
 use mod_portfoliogroup\util\user;
 use mod_portfoliogroup\util\entry;
 use renderable;
@@ -52,6 +53,7 @@ class view implements renderable, templatable {
         $usergroup = null;
         $layout = 'timeline';
         $groupsmembers = [];
+        $grade = false;
         if ($usergroups) {
             $usergroup = current($usergroups);
 
@@ -59,6 +61,9 @@ class view implements renderable, templatable {
 
             $layoututil = new \mod_portfoliogroup\util\layout();
             $layout = $layoututil->get_group_layout($this->portfoliogroup->course, $usergroup->id);
+
+            $gradeutil = new grade();
+            $grade = $gradeutil->get_group_course_grade($this->portfoliogroup->course, $usergroup->id);
         }
 
         $publicurl = new \moodle_url('/mod/portfoliogroup/portfolio.php', ['id' => $this->context->instanceid, 'u' => $USER->id]);
@@ -73,7 +78,7 @@ class view implements renderable, templatable {
             'userpicture' => $userdata['picture'],
             'contextid' => $this->context->id,
             'cangrade' => has_capability('mod/portfoliogroup:grade', $this->context),
-            'isevaluated' => $this->portfoliogroup->grade != 0,
+            'grade' => $grade,
             'encodedpublicurl' => htmlentities($publicurl),
             'group' => $usergroup,
             'groupsmembers' => $groupsmembers,
