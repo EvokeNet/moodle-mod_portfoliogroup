@@ -18,7 +18,7 @@ use mod_portfoliogroup\util\portfolio;
  */
 class grade extends \moodleform {
 
-    private $userid = null;
+    private $groupid = null;
 
     public function __construct($formdata, $customdata = null) {
         parent::__construct(null, $customdata, 'post',  '', ['class' => 'portfoliogroup-grade-form'], true, $formdata);
@@ -32,17 +32,13 @@ class grade extends \moodleform {
     public function definition() {
         $mform = $this->_form;
 
-        if (isset($this->_customdata['userid'])) {
-            $this->userid = $this->_customdata['userid'];
+        $this->groupid = $this->_customdata['groupid'];
 
-            $mform->addElement('hidden', 'userid', $this->_customdata['userid']);
-            $mform->setType('userid', PARAM_INT);
-        }
+        $mform->addElement('hidden', 'groupid', $this->_customdata['groupid']);
+        $mform->setType('groupid', PARAM_INT);
 
-        if (isset($this->_customdata['courseid'])) {
-            $mform->addElement('hidden', 'courseid', $this->_customdata['courseid']);
-            $mform->setType('courseid', PARAM_INT);
-        }
+        $mform->addElement('hidden', 'courseid', $this->_customdata['courseid']);
+        $mform->setType('courseid', PARAM_INT);
 
         $gradeutil = new gradeutil();
         $portfolio = $gradeutil->get_portfolio_with_evaluation($this->_customdata['courseid']);
@@ -55,7 +51,7 @@ class grade extends \moodleform {
     }
 
     private function fill_form_with_grade_fields($mform, $portfolio) {
-        $usergradegrade = $this->get_user_grade($portfolio, $this->userid);
+        $groupgrade = $this->get_group_grade($portfolio, $this->groupid);
 
         if ($portfolio->grade > 0) {
             $mform->addElement('text', 'grade', get_string('grade', 'mod_portfoliogroup'));
@@ -64,8 +60,8 @@ class grade extends \moodleform {
             $mform->addRule('grade', get_string('required'), 'required', null, 'client');
             $mform->setType('grade', PARAM_RAW);
 
-            if ($usergradegrade) {
-                $mform->setDefault('grade', $usergradegrade);
+            if ($groupgrade) {
+                $mform->setDefault('grade', $groupgrade);
             }
         }
 
@@ -76,17 +72,17 @@ class grade extends \moodleform {
             $mform->setType('grade', PARAM_INT);
             $mform->addRule('grade', get_string('required'), 'required', null, 'client');
 
-            if ($usergradegrade) {
-                $mform->setDefault('grade', $usergradegrade);
+            if ($groupgrade) {
+                $mform->setDefault('grade', $groupgrade);
             }
         }
     }
 
-    private function get_user_grade($portfolio, $userid) {
+    private function get_group_grade($portfolio, $groupid) {
         $gradeutil = new gradeutil();
-        $usergrade = $gradeutil->get_user_grade($portfolio, $userid);
+        $groupgrade = $gradeutil->get_group_grade($portfolio, $groupid);
 
-        return $this->process_grade($portfolio->grade, $usergrade);
+        return $this->process_grade($portfolio->grade, $groupgrade);
     }
 
     private function process_grade($portfoliograde, $grade = null) {

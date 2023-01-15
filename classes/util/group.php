@@ -11,6 +11,12 @@ defined('MOODLE_INTERNAL') || die();
  * @author      Willian Mano <willianmanoaraujo@gmail.com>
  */
 class group {
+    public function get_group($groupid) {
+        global $DB;
+
+        return $DB->get_record('groups', ['id' => $groupid], '*', MUST_EXIST);
+    }
+
     public function get_user_group($courseid, $userid = null) {
         global $USER;
 

@@ -62,6 +62,10 @@ function portfoliogroup_add_instance($moduleinstance, $mform = null) {
 
     $id = $DB->insert_record('portfoliogroup', $moduleinstance);
 
+    $moduleinstance->id = $id;
+
+    portfoliogroup_grade_item_update($moduleinstance);
+
     return $id;
 }
 
@@ -80,6 +84,8 @@ function portfoliogroup_update_instance($moduleinstance, $mform = null) {
 
     $moduleinstance->timemodified = time();
     $moduleinstance->id = $moduleinstance->instance;
+
+    portfoliogroup_grade_item_update($moduleinstance);
 
     return $DB->update_record('portfoliogroup', $moduleinstance);
 }
@@ -169,7 +175,7 @@ function portfoliogroup_grade_item_update($moduleinstance, $reset=false) {
     require_once($CFG->libdir.'/gradelib.php');
 
     $item = array();
-    $item['itemname'] = 'Portfolio';
+    $item['itemname'] = 'Portfolio group';
     $item['gradetype'] = GRADE_TYPE_VALUE;
 
     if ($moduleinstance->grade > 0) {
@@ -186,7 +192,7 @@ function portfoliogroup_grade_item_update($moduleinstance, $reset=false) {
         $item['reset'] = true;
     }
 
-    grade_update('/mod/portfoliogroup', $moduleinstance->course, 'mod', 'mod_portfoliogroup', $moduleinstance->id, 0, null, $item);
+    grade_update('/mod/portfoliogroup', $moduleinstance->course, 'mod', 'portfoliogroup', $moduleinstance->id, 0, null, $item);
 }
 
 /**
@@ -300,35 +306,6 @@ function portfoliogroup_pluginfile($course, $cm, $context, $filearea, $args, $fo
     send_stored_file($file, 0, 0, $forcedownload, $options);
 }
 
-/**
- * Returns entry form fragment.
- *
- * @param $args
- * @return string
- */
-function mod_portfoliogroup_output_fragment_entry_form($args) {
-    $args = (object) $args;
-
-    $formdata = [];
-    $serialiseddata = json_decode($args->jsonformdata);
-    if (!empty($serialiseddata)) {
-        $formdata = (array)$serialiseddata;
-//        parse_str($serialiseddata, $formdata);
-    }
-
-    $mform = new \mod_portfoliogroup\form\entry($formdata, [
-        'courseid' => $serialiseddata->courseid,
-        'portfolioid' => $serialiseddata->portfolioid,
-    ]);
-
-    if (!empty($args->jsonformdata)) {
-        // If we were passed non-empty form data we want the mform to call validation functions and show errors.
-        $mform->is_validated();
-    }
-
-    return $mform->render();
-}
-
 function mod_portfoliogroup_output_fragment_grade_form($args) {
     $args = (object) $args;
     $o = '';
@@ -340,7 +317,7 @@ function mod_portfoliogroup_output_fragment_grade_form($args) {
     }
 
     $mform = new \mod_portfoliogroup\form\grade($formdata, [
-        'userid' => $serialiseddata->userid,
+        'groupid' => $serialiseddata->groupid,
         'courseid' => $serialiseddata->courseid
     ]);
 

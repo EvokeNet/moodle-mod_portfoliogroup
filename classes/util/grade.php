@@ -19,10 +19,10 @@ class grade {
         return $DB->get_record_sql($sql, ['courseid' => $courseid]);
     }
 
-    public function user_has_grade($portfolio, $userid) {
-        $usergrade = $this->get_user_grade_object($portfolio, $userid);
+    public function group_has_grade($portfolio, $groupid) {
+        $groupgrade = $this->get_group_grade_object($portfolio, $groupid);
 
-        if ($usergrade) {
+        if ($groupgrade) {
             return true;
         }
 
@@ -39,14 +39,14 @@ class grade {
         return $groupgrade->grade;
     }
 
-    public function get_group_course_grade($courseid, $userid) {
+    public function get_group_course_grade($courseid, $groupid) {
         $portfolio = $this->get_portfolio_with_evaluation($courseid);
 
         if (!$portfolio) {
             return false;
         }
 
-        return $this->get_group_grade_string($portfolio, $userid);
+        return $this->get_group_grade_string($portfolio, $groupid);
     }
 
     public function get_group_grade_object($portfolio, $groupid) {
@@ -65,64 +65,79 @@ class grade {
     public function get_group_grade_string($portfolio, $groupid) {
         global $DB;
 
-        $usergrade = $this->get_group_grade($portfolio, $groupid);
+        $groupgrade = $this->get_group_grade($portfolio, $groupid);
 
-        if (!$usergrade) {
+        if (!$groupgrade) {
             return false;
         }
 
         if ($portfolio->grade > 0) {
-            return (int)$usergrade;
+            return (int)$groupgrade;
         }
 
         $scale = $DB->get_record('scale', ['id' => abs($portfolio->grade)], '*', MUST_EXIST);
 
         $scales = explode(',', $scale->scale);
 
-        $scaleindex = (int)$usergrade - 1;
+        $scaleindex = (int)$groupgrade - 1;
 
         return $scales[$scaleindex];
     }
 
-    public function grade_user($portfolio, $userid, $grade) {
+    public function grade_group($portfolio, $groupid, $grade) {
         global $CFG;
 
-        $grades[$userid] = new \stdClass();
-        $grades[$userid]->userid = $userid;
-        $grades[$userid]->rawgrade = $grade;
+        $grouputil = new group();
 
-        $this->update_user_grades($portfolio->id, $grades);
+        $group = $grouputil->get_group($groupid);
+
+        $groupmembers = $grouputil->get_group_members($group->id, false);
+
+        if (!$groupmembers) {
+            return true;
+        }
+
+        $this->update_group_grade($portfolio, $group->id, $grade);
+
+        $grades = [];
+        foreach ($groupmembers as $groupmember) {
+            $grades[$groupmember->id] = new \stdClass();
+            $grades[$groupmember->id]->userid = $groupmember->id;
+            $grades[$groupmember->id]->rawgrade = $grade;
+        }
 
         require_once($CFG->libdir . '/gradelib.php');
 
-        grade_update('mod/portfoliogroup', $portfolio->course, 'mod', 'portfoliogroup', $portfolio->id, 0, $grades);
+        return grade_update('mod/portfoliogroup', $portfolio->course, 'mod', 'portfoliogroup', $portfolio->id, 0, $grades);
     }
 
-    private function update_user_grades($portfolioid, $grades) {
+    private function update_group_grade($portfolio, $groupid, $grade) {
         global $DB, $USER;
 
-        foreach ($grades as $grade) {
-            $dbgrade = $this->get_user_grade_object($portfolioid, $grade->userid);
+        $dbgrade = $this->get_group_grade_object($portfolio, $groupid);
 
-            if ($dbgrade) {
-                $dbgrade->grader = $USER->id;
-                $dbgrade->grade = $grade->rawgrade;
-                $dbgrade->timemodified = time();
+        if ($dbgrade) {
+            $dbgrade->grader = $USER->id;
+            $dbgrade->grade = $grade;
+            $dbgrade->timemodified = time();
 
-                $DB->update_record('portfoliogroup_grades', $dbgrade);
+            $DB->update_record('portfoliogroup_grades', $dbgrade);
 
-                continue;
-            }
-
-            $usergrade = new \stdClass();
-            $usergrade->portfolioid = $portfolioid;
-            $usergrade->userid = $grade->userid;
-            $usergrade->grader = $USER->id;
-            $usergrade->grade = $grade->rawgrade;
-            $usergrade->timecreated = time();
-            $usergrade->timemodified = time();
-
-            $DB->insert_record('portfoliogroup_grades', $usergrade);
+            return $dbgrade;
         }
+
+        $groupgrade = new \stdClass();
+        $groupgrade->portfolioid = $portfolio->id;
+        $groupgrade->groupid = $groupid;
+        $groupgrade->grader = $USER->id;
+        $groupgrade->grade = $grade;
+        $groupgrade->timecreated = time();
+        $groupgrade->timemodified = time();
+
+        $id = $DB->insert_record('portfoliogroup_grades', $groupgrade);
+
+        $groupgrade->id = $id;
+
+        return $groupgrade;
     }
 }

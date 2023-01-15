@@ -32,8 +32,6 @@ class grade extends external_api {
      * Grade method
      *
      * @param int $contextid
-     * @param int $chapterid
-     * @param int $userid
      * @param string $jsonformdata
      *
      * @return array
@@ -44,8 +42,6 @@ class grade extends external_api {
      * @throws \moodle_exception
      */
     public static function grade($contextid, $jsonformdata) {
-        global $DB;
-
         // We always must pass webservice params through validate_parameters.
         $params = self::validate_parameters(self::grade_parameters(), [
             'contextid' => $contextid,
@@ -69,12 +65,12 @@ class grade extends external_api {
             throw new \moodle_exception('missingportfoliowithevaluation', 'mod_portfoliogroup');
         }
 
-        $gradeutil->grade_user($portfolio, $data['userid'], $data['grade']);
+        $gradeutil->grade_group($portfolio, $data['groupid'], $data['grade']);
 
         return [
             'status' => 'ok',
             'message' => get_string('grading_success', 'mod_portfoliogroup'),
-            'assessmenttext' => get_string('assessment', 'mod_portfoliogroup') . ': ' . $gradeutil->get_user_grade_string($portfolio ,$data['userid'])
+            'assessmenttext' => get_string('assessment', 'mod_portfoliogroup') . ': ' . $gradeutil->get_group_grade_string($portfolio ,$data['groupid'])
         ];
     }
 
