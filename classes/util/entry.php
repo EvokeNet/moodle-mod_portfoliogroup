@@ -26,7 +26,7 @@ class entry {
     }
 
     public function get_group_course_entries($courseid, $groupid) {
-        global $DB;
+        global $DB, $USER;
 
         $sql = 'SELECT e.*, u.firstnamephonetic, u.lastnamephonetic, u.middlename, u.alternatename, u.firstname, u.lastname
                 FROM {portfoliogroup_entries} e
@@ -60,7 +60,9 @@ class entry {
                 'hasfiles' => !empty($files),
                 'files' => $files,
                 'position' => ($i % 2 == 0) ? 'right' : 'left',
-                'postedby' => fullname($record)
+                'postedby' => fullname($record),
+                'itsmine' => $USER->id === $record->userid,
+                'cmid' => $context->instanceid
             ];
 
             $data[] = array_merge($entry, $this->get_entry_reactions($record->id), $this->get_entry_comments($record->id));
