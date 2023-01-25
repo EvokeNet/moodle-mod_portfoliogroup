@@ -67,8 +67,6 @@ $string['editcomment_success'] = 'Comment successfully edited.';
 $string['edited'] = 'Edited';
 
 $string['myteam'] = 'My team';
-$string['myportfolios'] = 'My Portfolios';
-$string['myportfolio'] = 'My Portfolio';
 $string['teamportfolio'] = 'Team Portfolio';
 $string['networkportfolio'] = 'Network Portfolio';
 
@@ -111,5 +109,4 @@ $string['shareportfolio'] = 'Share portfolio';
 $string['usernogroup'] = 'You are not a member of a group.';
 $string['usernogroupdesc'] = 'Dear student, this is a group activity, to do it you need to be part of a group.';
 $string['backtocampaign'] = 'Back to campaign';
-$string['shareportfolio'] = 'Share portfolio';
 $string['changelayout'] = 'Change layout';
