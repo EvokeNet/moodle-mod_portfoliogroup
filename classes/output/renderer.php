@@ -10,6 +10,7 @@ use renderable;
 /**
  * Main portfolio's renderer.
  *
+ * @package     mod_portfoliogroup
  * @copyright   2023 World Bank Group <https://worldbank.org>
  * @author      Willian Mano <willianmanoaraujo@gmail.com>
  */

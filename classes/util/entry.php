@@ -5,8 +5,9 @@ namespace mod_portfoliogroup\util;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Layout utility class helper
+ * Entry utility class helper
  *
+ * @package     mod_portfoliogroup
  * @copyright   2023 World Bank Group <https://worldbank.org>
  * @author      Willian Mano <willianmanoaraujo@gmail.com>
  */

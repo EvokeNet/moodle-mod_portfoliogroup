@@ -1,3 +1,10 @@
+/**
+ * Load portfolios
+ *
+ * @copyright   2023 World Bank Group <https://worldbank.org>
+ * @author      Willian Mano <willianmanoaraujo@gmail.com>
+ */
+
 /* eslint-disable */
 define(['jquery', 'core/ajax', 'core/templates'], function($, Ajax, Templates) {
     var LoadPortfolios = function(courseid, type) {

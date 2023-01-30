@@ -15,6 +15,7 @@ use mod_portfoliogroup\util\entry;
 /**
  * Portfolio renderable class.
  *
+ * @package     mod_portfoliogroup
  * @copyright   2023 World Bank Group <https://worldbank.org>
  * @author      Willian Mano <willianmanoaraujo@gmail.com>
  */

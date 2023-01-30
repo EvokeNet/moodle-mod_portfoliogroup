@@ -5,9 +5,10 @@ namespace mod_portfoliogroup\util;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Groups utility class helper
+ * Group utility class helper
  *
- * @copyright   2021 World Bank Group <https://worldbank.org>
+ * @package     mod_portfoliogroup
+ * @copyright   2023 World Bank Group <https://worldbank.org>
  * @author      Willian Mano <willianmanoaraujo@gmail.com>
  */
 class group {

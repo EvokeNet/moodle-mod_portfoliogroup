@@ -11,6 +11,7 @@ use renderer_base;
 /**
  * Layout renderable class.
  *
+ * @package     mod_portfoliogroup
  * @copyright   2023 World Bank Group <https://worldbank.org>
  * @author      Willian Mano <willianmanoaraujo@gmail.com>
  */

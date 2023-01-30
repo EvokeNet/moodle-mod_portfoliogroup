@@ -6,7 +6,6 @@ namespace mod_portfoliogroup\event;
  * The comment_added event class.
  *
  * @package     mod_portfoliogroup
- * @category    event
  * @copyright   2023 World Bank Group <https://worldbank.org>
  * @author      Willian Mano <willianmanoaraujo@gmail.com>
  */

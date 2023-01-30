@@ -6,7 +6,6 @@ namespace mod_portfoliogroup\event;
  * The course_module_viewed event class.
  *
  * @package     mod_portfoliogroup
- * @category    event
  * @copyright   2023 World Bank Group <https://worldbank.org>
  * @author      Willian Mano <willianmanoaraujo@gmail.com>
  */
