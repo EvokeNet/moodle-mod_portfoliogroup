@@ -108,8 +108,10 @@ if ($form->is_cancelled()) {
             $params = array(
                 'context' => $context,
                 'objectid' => $entryid,
-                'groupid' => $entry->groupid,
-                'relateduserid' => $entry->userid
+                'relateduserid' => $entry->userid,
+                'other' => [
+                    'groupid' => $entry->groupid
+                ]
             );
             $event = \mod_portfoliogroup\event\entry_added::create($params);
             $event->add_record_snapshot('portfoliogroup_entries', $entry);

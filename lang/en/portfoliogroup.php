@@ -95,3 +95,6 @@ $string['usernogroup'] = 'You are not a member of a group.';
 $string['usernogroupdesc'] = 'Dear student, this is a group activity, to do it you need to be part of a group.';
 $string['backtocampaign'] = 'Back to campaign';
 $string['changelayout'] = 'Change layout';
+
+$string['completionrequiresubmit'] = 'Require submission';
+$string['completionrequiresubmit_help'] = 'The user needs to submit to complete this activity';

@@ -61,8 +61,10 @@ class reaction {
             'context' => $context,
             'objectid' => $reaction->id,
             'courseid' => $portfolio->course,
-            'groupid' => $portfolio->groupid,
-            'relateduserid' => $portfolio->userid
+            'relateduserid' => $portfolio->userid,
+            'other' => [
+                'groupid' => $portfolio->groupid,
+            ]
         );
 
         $event = \mod_portfoliogroup\event\like_sent::create($eventparams);

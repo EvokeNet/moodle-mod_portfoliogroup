@@ -118,8 +118,10 @@ class comment extends external_api {
             'context' => $contextmodule,
             'objectid' => $insertedid,
             'courseid' => $utildata->course,
-            'groupid' => $utildata->groupid,
-            'relateduserid' => $utildata->userid
+            'relateduserid' => $utildata->userid,
+            'other' => [
+                'groupid' => $utildata->groupid
+            ]
         );
         $event = \mod_portfoliogroup\event\comment_added::create($params);
         $event->add_record_snapshot('portfoliogroup_comments', $usercomment);
