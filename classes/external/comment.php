@@ -54,7 +54,7 @@ class comment extends external_api {
 
         $comment = (object)$comment;
 
-        $sql = 'SELECT e.id, e.userid, p.id as portfolioid, p.course, p.name as portfolioname
+        $sql = 'SELECT e.id, e.userid, e.groupid, p.id as portfolioid, p.course, p.name as portfolioname
                 FROM {portfoliogroup_entries} e
                 INNER JOIN {portfoliogroup} p ON p.id = e.portfolioid
                 WHERE e.id = :entryid';
@@ -118,6 +118,7 @@ class comment extends external_api {
             'context' => $contextmodule,
             'objectid' => $insertedid,
             'courseid' => $utildata->course,
+            'groupid' => $utildata->groupid,
             'relateduserid' => $utildata->userid
         );
         $event = \mod_portfoliogroup\event\comment_added::create($params);

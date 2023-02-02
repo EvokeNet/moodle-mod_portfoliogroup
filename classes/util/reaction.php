@@ -46,7 +46,7 @@ class reaction {
     private function dispatch_event($reaction) {
         global $DB;
 
-        $sql = 'SELECT p.id, p.course, e.userid
+        $sql = 'SELECT p.id, p.course, e.userid, e.groupid
                 FROM {portfoliogroup_entries} e
                 INNER JOIN {portfoliogroup} p ON p.id = e.portfolioid
                 WHERE e.id = :entryid';
@@ -61,6 +61,7 @@ class reaction {
             'context' => $context,
             'objectid' => $reaction->id,
             'courseid' => $portfolio->course,
+            'groupid' => $portfolio->groupid,
             'relateduserid' => $portfolio->userid
         );
 

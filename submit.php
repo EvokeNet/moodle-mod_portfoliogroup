@@ -108,6 +108,7 @@ if ($form->is_cancelled()) {
             $params = array(
                 'context' => $context,
                 'objectid' => $entryid,
+                'groupid' => $entry->groupid,
                 'relateduserid' => $entry->userid
             );
             $event = \mod_portfoliogroup\event\entry_added::create($params);
