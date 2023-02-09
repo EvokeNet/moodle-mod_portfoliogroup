@@ -123,9 +123,28 @@ if ($form->is_cancelled()) {
 
             $completiondata = $completion->get_data($cm, false, $USER->id);
 
-            // If the user completed the activity and it is a group activity, mark all group members as complete.
+            // If the user completed the activity, mark all group members as complete.
             if ($completiondata->completionstate == 1) {
-                // TODO: Check completion state.
+                if ($groupmembers = $grouputil->get_group_members($formdata->groupid, false)) {
+                    foreach ($groupmembers as $groupsmember) {
+                        // Skip current user.
+                        if ($groupsmember->id == $USER->id) {
+                            continue;
+                        }
+
+                        $current = $completion->get_data($cm, false, $groupsmember->id);
+
+                        if ($current->completionstate == 1) {
+                            continue;
+                        }
+
+                        $current->completionstate = COMPLETION_COMPLETE;
+                        $current->timemodified = time();
+                        $current->overrideby = $USER->id;
+
+                        $completion->internal_set_data($cm, $current);
+                    }
+                }
             }
 
             $redirectstring = get_string('entry:add_success', 'mod_portfoliogroup');

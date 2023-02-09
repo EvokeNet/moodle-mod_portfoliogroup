@@ -162,7 +162,7 @@ function portfoliogroup_grade_item_update($moduleinstance, $reset=false) {
     require_once($CFG->libdir.'/gradelib.php');
 
     $item = array();
-    $item['itemname'] = 'Portfolio group';
+    $item['itemname'] = clean_param($moduleinstance->name, PARAM_NOTAGS);
     $item['gradetype'] = GRADE_TYPE_VALUE;
 
     if ($moduleinstance->grade > 0) {

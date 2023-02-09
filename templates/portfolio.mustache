@@ -6,20 +6,6 @@
             <i class="fa fa-angle-left"></i> {{#str}}backtoportfolios, mod_portfoliogroup{{/str}}
             </a>
         </div>
-
-        <div class="usergradeinfo ml-auto">
-            {{#cangrade}}
-                {{#grade}}
-                    <span class="badge badge-success">{{#str}}assessment, mod_portfoliogroup{{/str}}: {{{grade}}}</span>
-                {{/grade}}
-                {{^grade}}
-                    <button class="btn btn-danger grade-portfolio" data-courseid="{{courseid}}" data-groupid="{{groupid}}">
-                        <i class="fa fa-pencil-square-o"></i>
-                        {{#str}}addgrade, mod_portfoliogroup{{/str}}
-                    </button>
-                {{/grade}}
-            {{/cangrade}}
-        </div>
     </div>
 {{/isloggedin}}
 

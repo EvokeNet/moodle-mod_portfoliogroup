@@ -26,6 +26,18 @@ class entry {
         return $this->portfoliocontexts[$portfolioid];
     }
 
+    public function group_has_entry_in_portfolio_instance($portfolioid, $groupid) {
+        global $DB;
+
+        $count = $DB->count_records('portfoliogroup_entries', ['portfolioid' => $portfolioid, 'groupid' => $groupid]);
+
+        if (!$count) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function get_group_course_entries($courseid, $groupid) {
         global $DB, $USER;
 

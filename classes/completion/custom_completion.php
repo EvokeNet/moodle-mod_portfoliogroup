@@ -45,7 +45,7 @@ class custom_completion extends activity_custom_completion {
                 return COMPLETION_INCOMPLETE;
             }
 
-            if ($entryutil->get_group_course_entries($portfoliogroup->course, $group->id)) {
+            if ($entryutil->group_has_entry_in_portfolio_instance($portfoliogroup->id, $group->id)) {
                 return COMPLETION_COMPLETE;
             }
         }

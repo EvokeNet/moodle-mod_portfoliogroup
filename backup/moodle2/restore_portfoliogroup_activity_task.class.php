@@ -13,7 +13,7 @@ defined('MOODLE_INTERNAL') || die();
 // More information about the backup process: {@link https://docs.moodle.org/dev/Backup_API}.
 // More information about the restore process: {@link https://docs.moodle.org/dev/Restore_API}.
 
-require_once($CFG->dirroot.'//mod/portfoliogroup/backup/moodle2/restore_portfoliogroup_stepslib.php');
+require_once($CFG->dirroot.'/mod/portfoliogroup/backup/moodle2/restore_portfoliogroup_stepslib.php');
 
 /**
  * Restore task for mod_portfoliogroup.
