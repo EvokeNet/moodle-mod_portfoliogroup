@@ -305,7 +305,7 @@ function mod_portfoliogroup_output_fragment_grade_form($args) {
 
     $mform = new \mod_portfoliogroup\form\grade($formdata, [
         'groupid' => $serialiseddata->groupid,
-        'courseid' => $serialiseddata->courseid
+        'instanceid' => $serialiseddata->instanceid
     ]);
 
     if (!empty($args->jsonformdata)) {

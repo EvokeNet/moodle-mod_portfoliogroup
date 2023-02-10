@@ -23,18 +23,14 @@ use html_writer;
 class portfolios extends table_sql {
 
     protected $context;
-    protected $course;
-    protected $portfoliowithevaluation;
+    protected $portfoliogroup;
 
-    public function __construct($uniqueid, $context, $course) {
+    public function __construct($uniqueid, $context, $portfoliogroup) {
         parent::__construct($uniqueid);
 
         $this->context = $context;
-        $this->course = $course;
 
-        $gradeutil = new grade();
-
-        $this->portfoliowithevaluation = $gradeutil->get_portfolio_with_evaluation($this->course->id);
+        $this->portfoliogroup = $portfoliogroup;
 
         $this->define_columns(['id', 'name', 'members', 'status']);
 
@@ -44,7 +40,7 @@ class portfolios extends table_sql {
 
         $this->no_sorting('status');
 
-        $this->define_baseurl(new moodle_url('/mod/portfoliogroup/indextable.php', ['id' => $course->id]));
+        $this->define_baseurl(new moodle_url('/mod/portfoliogroup/indextable.php', ['id' => $this->portfoliogroup->course]));
 
         $this->base_sql();
 
@@ -58,7 +54,7 @@ class portfolios extends table_sql {
 
         $where = 'courseid = :courseid';
 
-        $params = ['courseid' => $this->course->id];
+        $params = ['courseid' => $this->portfoliogroup->course];
 
         $this->set_sql($fields, $from, $where, $params);
     }
@@ -66,7 +62,7 @@ class portfolios extends table_sql {
     public function col_members($data) {
         $grouputil = new group();
 
-        $members = $grouputil->get_group_members($data->id);
+        $members = $grouputil->get_group_members($data->id, true, $this->context);
 
         if (!$members) {
             return '';
@@ -84,15 +80,15 @@ class portfolios extends table_sql {
         $gradeutil = new grade();
         $entryutil = new entry();
 
-        $url = new moodle_url('/mod/portfoliogroup/portfolio.php', ['id' => $this->course->id, 'g' => $data->id]);
+        $url = new moodle_url('/mod/portfoliogroup/portfolio.php', ['id' => $this->portfoliogroup->course, 'g' => $data->id]);
 
         $statuscontent = html_writer::link($url, get_string('viewportfolio', 'mod_portfoliogroup'), ['class' => 'btn btn-primary btn-sm']);
 
-        if ($entryutil->get_total_course_entries($this->course->id, $data->id)) {
+        if ($entryutil->get_total_course_entries($this->portfoliogroup->course, $data->id)) {
             $statuscontent .= html_writer::span(get_string('submitted', 'mod_portfoliogroup'), 'badge badge-info ml-2 p-2');
         }
 
-        if ($this->portfoliowithevaluation && $gradeutil->get_group_grade($this->portfoliowithevaluation, $data->id)) {
+        if ($gradeutil->get_group_grade($this->portfoliogroup, $data->id)) {
             $statuscontent .= html_writer::span(get_string('evaluated', 'mod_portfoliogroup'), 'badge badge-success ml-2 p-2');
         }
 

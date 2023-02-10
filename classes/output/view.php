@@ -62,9 +62,6 @@ class view implements renderable, templatable {
 
             $layoututil = new \mod_portfoliogroup\util\layout();
             $layout = $layoututil->get_group_layout($this->portfoliogroup->course, $usergroup->id);
-
-            $gradeutil = new grade();
-            $grade = $gradeutil->get_group_course_grade($this->portfoliogroup->course, $usergroup->id);
         }
 
         $publicurl = new \moodle_url('/mod/portfoliogroup/portfolio.php', ['id' => $this->context->instanceid, 'u' => $USER->id]);

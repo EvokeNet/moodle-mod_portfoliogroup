@@ -105,26 +105,30 @@ class group {
             $ids[] = $group->id;
         }
 
-        list($groupsids, $groupsparams) = $DB->get_in_or_equal($ids, SQL_PARAMS_NAMED, 'group');
+        list($groupsids, $params) = $DB->get_in_or_equal($ids, SQL_PARAMS_NAMED, 'group');
 
         $sql = "SELECT u.*
                 FROM {groups_members} gm
                 INNER JOIN {user} u ON u.id = gm.userid
                 WHERE gm.groupid " . $groupsids;
 
-        $groupsmembers = $DB->get_records_sql($sql, $groupsparams);
+        // Remove any person who have access to grade students. Teachers, mentors...
+        if ($contexttofilter) {
+            $userutil = new user();
+
+            if ($userstoremove = $userutil->get_user_ids_with_grade_capability($contexttofilter)) {
+                list($sqlin, $paramsin) = $DB->get_in_or_equal($userstoremove, SQL_PARAMS_NAMED, 'notin_', false);
+
+                $sql .= " AND u.id {$sqlin}";
+
+                $params = array_merge($params, $paramsin);
+            }
+        }
+
+        $groupsmembers = $DB->get_records_sql($sql, $params);
 
         if (!$groupsmembers) {
             return false;
-        }
-
-        // Remove any person who have access to grade students. Teachers, mentors...
-        if ($contexttofilter) {
-            foreach ($groupsmembers as $key => $groupmember) {
-                if (has_capability('mod/portfoliogroup:grade', $contexttofilter, $groupmember->id)) {
-                    unset($groupsmembers[$key]);
-                }
-            }
         }
 
         if ($withfulluserinfo) {
@@ -141,7 +145,7 @@ class group {
         return array_values($groupsmembers);
     }
 
-    public function get_group_members($groupid, $withfulluserinfo = true) {
+    public function get_group_members($groupid, $withfulluserinfo = true, $contexttofilter = false) {
         global $DB;
 
         $sql = "SELECT u.*
@@ -149,7 +153,22 @@ class group {
                 INNER JOIN {user} u ON u.id = gm.userid
                 WHERE gm.groupid = :groupid";
 
-        $groupmembers = $DB->get_records_sql($sql, ['groupid' => $groupid]);
+        $params = ['groupid' => $groupid];
+
+        // Remove any person who have access to grade students. Teachers, mentors...
+        if ($contexttofilter) {
+            $userutil = new user();
+
+            if ($userstoremove = $userutil->get_user_ids_with_grade_capability($contexttofilter)) {
+                list($sqlin, $paramsin) = $DB->get_in_or_equal($userstoremove, SQL_PARAMS_NAMED, 'notin_', false);
+
+                $sql .= " AND u.id {$sqlin}";
+
+                $params = array_merge($params, $paramsin);
+            }
+        }
+
+        $groupmembers = $DB->get_records_sql($sql, $params);
 
         if (!$groupmembers) {
             return false;

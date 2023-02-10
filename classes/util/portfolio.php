@@ -42,13 +42,9 @@ class portfolio {
         $entryutil = new entry();
         $layoututil = new layout();
         $logutil = new log();
-        $gradeutil = new grade();
         $grouputil = new group();
 
         $lastaccesstoportfolios = $logutil->get_last_time_accessed_portfolios($this->courseid);
-
-        $cangrade = has_capability('mod/portfoliogroup:grade', $this->context);
-        $portfoliowithevaluation = $gradeutil->get_portfolio_with_evaluation($this->courseid);
 
         foreach ($groups as $group) {
             $group->totallikes = $reactionutil->get_total_course_reactions($this->courseid, $group->id);
@@ -56,16 +52,12 @@ class portfolio {
             $group->totalentries = $entryutil->get_total_course_entries($this->courseid, $group->id);
             $group->layout = $layoututil->get_group_layout($this->courseid, $group->id, 'timeline');
             $group->lastentry = $entryutil->get_last_course_entry($this->courseid, $group->id);
-            $group->members = $grouputil->get_group_members($group->id);
+            $group->members = $grouputil->get_group_members($group->id, true, $this->context);
 
             $group->hasnews = false;
 
             if ($group->lastentry && $group->lastentry->timecreated > $lastaccesstoportfolios) {
                 $group->hasnews = true;
-            }
-
-            if ($cangrade) {
-                $group->grade = $gradeutil->get_group_grade_string($portfoliowithevaluation, $group->id);
             }
         }
     }

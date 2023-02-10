@@ -4,7 +4,6 @@ namespace mod_portfoliogroup\output;
 
 defined('MOODLE_INTERNAL') || die();
 
-use mod_portfoliogroup\util\grade;
 use mod_portfoliogroup\util\group;
 use renderable;
 use templatable;
@@ -35,7 +34,6 @@ class portfolio implements renderable, templatable {
 
         $isloggedin = isloggedin();
 
-        $gradeutil = new grade();
         $groupsutil = new group();
 
         $groupsmembers = $groupsutil->get_groups_members([$this->group], true, $this->context);
@@ -48,7 +46,7 @@ class portfolio implements renderable, templatable {
             'isloggedin' => $isloggedin,
             'cangrade' => has_capability('mod/portfoliogroup:grade', $this->context),
             'contextid' => $this->context->id,
-            'grade' => $gradeutil->get_group_course_grade($this->course->id, $this->group->id)
+            'grade' => false
         ];
 
         $userutil = new user();

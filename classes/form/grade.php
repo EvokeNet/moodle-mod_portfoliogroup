@@ -40,17 +40,19 @@ class grade extends \moodleform {
         $mform->addElement('hidden', 'courseid', $this->_customdata['courseid']);
         $mform->setType('courseid', PARAM_INT);
 
-        $gradeutil = new gradeutil();
-        $portfolio = $gradeutil->get_portfolio_with_evaluation($this->_customdata['courseid']);
+        $mform->addElement('hidden', 'instanceid', $this->_customdata['instanceid']);
+        $mform->setType('instanceid', PARAM_INT);
 
-        if ($portfolio) {
-            $this->fill_form_with_grade_fields($mform, $portfolio);
-        }
+        $this->fill_form_with_grade_fields($mform);
 
         $this->add_action_buttons(true);
     }
 
-    private function fill_form_with_grade_fields($mform, $portfolio) {
+    private function fill_form_with_grade_fields($mform) {
+        global $DB;
+
+        $portfolio = $DB->get_record('portfoliogroup', ['id' => $this->_customdata['instanceid']], '*', MUST_EXIST);
+
         $groupgrade = $this->get_group_grade($portfolio, $this->groupid);
 
         if ($portfolio->grade > 0) {

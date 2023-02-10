@@ -30,8 +30,8 @@ if ($id) {
 
 $context = context_module::instance($cm->id);
 
-if (has_capability('mod/portfoliogroup:grade', $context)) {
-    redirect(new moodle_url('/mod/portfoliogroup/index.php', ['id' => $course->id]));
+if (has_capability('mod/portfoliogroup:grade', $context) || is_siteadmin()) {
+    redirect(new moodle_url('/mod/portfoliogroup/indextable.php', ['id' => $id]));
 }
 
 $groupsutil = new \mod_portfoliogroup\util\group();

@@ -59,7 +59,7 @@ class grade extends external_api {
         parse_str($serialiseddata, $data);
 
         $gradeutil = new \mod_portfoliogroup\util\grade();
-        $portfolio = $gradeutil->get_portfolio_with_evaluation($data['courseid']);
+        $portfolio = null;
 
         if (!$portfolio) {
             throw new \moodle_exception('missingportfoliowithevaluation', 'mod_portfoliogroup');

@@ -8,15 +8,6 @@
     <a href="{{config.wwwroot}}/course/view.php?id={{courseid}}" class="btn btn-primary"><i class="fa fa-chevron-left"></i> {{#str}}backtocampaign, mod_portfoliogroup{{/str}}</a>
 {{/group}}
 
-<div class="text-right mb-3">
-    {{#grade}}
-        <span class="badge badge-success">{{#str}}assessment, mod_portfoliogroup{{/str}}: {{{.}}}</span>
-    {{/grade}}
-    {{^grade}}
-        <span class="badge badge-primary">{{#str}}notyetassessed, mod_portfoliogroup{{/str}}</span>
-    {{/grade}}
-</div>
-
 {{#group}}
 <div class="mb-3 d-flex border border-radius p-2">
     <div class="left">

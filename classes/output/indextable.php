@@ -19,11 +19,11 @@ use renderer_base;
 class indextable implements renderable, templatable {
 
     public $context;
-    public $course;
+    public $portfoliogroup;
 
-    public function __construct($context, $course) {
+    public function __construct($context, $portfoliogroup) {
         $this->context = $context;
-        $this->course = $course;
+        $this->portfoliogroup = $portfoliogroup;
     }
 
     /**
@@ -40,7 +40,7 @@ class indextable implements renderable, templatable {
         $table = new portfolios(
             'mod-evokeportfolio-portfolios-table',
             $this->context,
-            $this->course
+            $this->portfoliogroup
         );
 
         $table->collapsible(false);

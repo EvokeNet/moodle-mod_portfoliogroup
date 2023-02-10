@@ -23,6 +23,10 @@ require_course_login($course, true, $cm);
 
 $context = context_module::instance($cm->id);
 
+if (has_capability('mod/portfoliogroup:grade', $context) || is_siteadmin()) {
+    redirect(new moodle_url('/mod/portfoliogroup/indextable.php', ['id' => $id]));
+}
+
 $PAGE->set_url('/mod/portfoliogroup/layout.php', ['id' => $cm->id]);
 $PAGE->set_title(format_string($portfoliogroup->name));
 $PAGE->set_heading(format_string($course->fullname));
