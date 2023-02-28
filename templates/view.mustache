@@ -77,8 +77,9 @@
         'mod_portfoliogroup/togglelike',
         'mod_portfoliogroup/tribute_init',
         'mod_portfoliogroup/comment/add',
-        'mod_portfoliogroup/comment/edit'
-    ], function($, Swal, ToggleLike, TributeInit, AddComment, EditComment) {
+        'mod_portfoliogroup/comment/edit',
+        'mod_portfoliogroup/entrydelete'
+    ], function($, Swal, ToggleLike, TributeInit, AddComment, EditComment, EntryDelete) {
         TributeInit.init();
 
         AddComment.init();
@@ -86,6 +87,8 @@
         EditComment.init({{{contextid}}});
 
         ToggleLike.init();
+
+        EntryDelete.init();
 
         $('.carousel').carousel({
             interval: 5000,

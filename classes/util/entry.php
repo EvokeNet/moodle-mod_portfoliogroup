@@ -231,4 +231,35 @@ class entry {
 
         return $record;
     }
+
+    public function delete_entry($entryid) {
+        global $DB, $USER;
+
+        $entry = $DB->get_record('portfoliogroup_entries', ['id' => $entryid, 'userid' => $USER->id], '*', MUST_EXIST);
+
+        $DB->delete_records('portfoliogroup_comments', ['entryid' => $entry->id]);
+
+        $DB->delete_records('portfoliogroup_reactions', ['entryid' => $entry->id]);
+
+        $DB->delete_records('portfoliogroup_entries', ['id' => $entry->id]);
+
+        $coursemodule = get_coursemodule_from_instance('portfoliogroup', $entry->portfolioid, $entry->courseid);
+
+        $context = \context_module::instance($coursemodule->id);
+
+        $fs = get_file_storage();
+
+        $files = $fs->get_area_files($context->id,
+            'mod_portfoliogroup',
+            'attachments',
+            $entryid,
+            'timemodified',
+            false);
+
+        if ($files) {
+            foreach ($files as $file) {
+                $file->delete();
+            }
+        }
+    }
 }
