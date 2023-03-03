@@ -37,17 +37,5 @@ function xmldb_portfoliogroup_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2023012300, 'mod', 'portfoliogroup');
     }
 
-    if ($oldversion < 2023030200) {
-        $entries = $DB->get_records('portfoliogroup_entries');
-
-        $entryutil = new \mod_portfoliogroup\util\entry();
-
-        foreach ($entries as $entry) {
-            $entryutil->create_entry_thumbs($entry);
-        }
-
-        upgrade_plugin_savepoint(true, 2023030200, 'mod', 'portfoliogroup');
-    }
-
     return true;
 }
