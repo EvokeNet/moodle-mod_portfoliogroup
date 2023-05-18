@@ -107,3 +107,12 @@ $string['entrydelete_confirm_msg'] = 'Once deleted, this entry cannot be recover
 $string['entrydelete_confirm_yes'] = 'Yes, delete it.';
 $string['entrydelete_confirm_no'] = 'Cancel';
 $string['entrydelete_success'] = 'Entry successfully deleted.';
+
+$string['message_mentioned'] = 'You were mentioned in a comment';
+$string['message_mentionedinaportfolio'] = 'You were mentioned in a comment in the portfolio <b>{$a}</b>';
+$string['message_mentioncontextname'] = 'Mentioned in a comment.';
+$string['message_clicktoaccessportfolio'] = 'Click here to access the portfolio';
+
+$string['viewmyindividualportfolio'] = 'View my individual portfolio';
+$string['myindividualportfolio'] = 'My individual portfolio';
+$string['clicktoviewcolleagueportfolio'] = 'Click on your group colleague\'s profiles to see their portfolios';
