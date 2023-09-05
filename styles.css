@@ -17,8 +17,8 @@
 }
 #page-mod-portfoliogroup-layout input[type="radio"]:after {
     position: absolute;
-    font-family: "FontAwesome";
-    font-weight: 400;
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
     content: "\f10c";
     font-size: 18px;
     color: #478bfb;
