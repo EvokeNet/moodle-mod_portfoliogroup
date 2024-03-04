@@ -116,3 +116,5 @@ $string['message_clicktoaccessportfolio'] = 'Click here to access the portfolio'
 $string['viewmyindividualportfolio'] = 'View my individual portfolio';
 $string['myindividualportfolio'] = 'My individual portfolio';
 $string['clicktoviewcolleagueportfolio'] = 'Click on your group colleague\'s profiles to see their portfolios';
+
+$string['messageprovider:commentmention'] = 'You were mentioned in a comment';
